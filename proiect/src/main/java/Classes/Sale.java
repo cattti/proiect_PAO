@@ -9,21 +9,23 @@ public class Sale {
     private List<Product> products;
     private double totalPrice;
     private Client client;
-
+    private Employee cashier;
     // Constructor
-    public Sale(int id, Date date, List<Product> products, double totalPrice, Client client) {
+    public Sale(int id, Date date, List<Product> products, double totalPrice, Client client,  Employee cashier) {
         this.id = id;
         this.date = date;
         this.products = products;
         this.totalPrice = totalPrice;
         this.client = client;
+        this.cashier=cashier;
     }
 
-    // Getter and setter methods for each attribute
     public int getId() {
         return id;
     }
-
+    public void setCashier(Employee cashier) {
+        this.cashier = cashier;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -58,6 +60,9 @@ public class Sale {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+    public Employee getCashier() {
+        return cashier;
     }
 
 }

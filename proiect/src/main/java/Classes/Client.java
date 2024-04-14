@@ -13,7 +13,6 @@ package Classes;
         this.contact = contact;
     }
 
-    // Accessor methods to read and modify client attributes
 
     public int getId() {
         return id;

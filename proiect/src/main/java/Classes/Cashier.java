@@ -9,7 +9,6 @@ public class Cashier extends Employee{
     }
 
 
-    // Getter and setter methods for registerNumber
     public int getRegisterNumber() {
         return registerNumber;
     }

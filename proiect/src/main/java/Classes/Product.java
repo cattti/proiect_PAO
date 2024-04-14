@@ -15,7 +15,6 @@ public class Product {
         this.category = category;
     }
 
-    // Accessor methods to read and modify product attributes
 
     public int getId() {
         return id;

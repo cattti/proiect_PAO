@@ -59,7 +59,7 @@ public class Inventory {
         return products;
     }
 
-    public void updateProductQuantity(Product product, int quantityChange) {
+    public static void updateProductQuantity(Product product, int quantityChange) {
         for (Product p : products) {
             if (p.equals(product)) {
                 int newQuantity = p.getQuantity() + quantityChange;
@@ -68,4 +68,13 @@ public class Inventory {
             }
         }
     }
+    public static Product searchById(int id) {
+        for (Product product : products) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+        return null;
+    }
+
 }

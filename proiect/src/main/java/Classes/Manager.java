@@ -8,7 +8,6 @@ public class Manager extends Employee{
         this.bonusPercentage = bonusPercentage;
     }
 
-    // Getter and setter methods for bonusPercentage
     public double getBonusPercentage() {
         return bonusPercentage;
     }

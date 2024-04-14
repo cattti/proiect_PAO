@@ -1,19 +1,25 @@
 package Classes;
 
+import java.util.List;
+
 public class Supplier {
     private int id;
     private String name;
     private String address;
     private String contact;
-
-    public Supplier(int id, String name, String address, String contact) {
+    public List<Product> products;
+    public Supplier(int id, String name, String address, String contact,List<Product> products ) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.contact = contact;
+        this.products = products;
+
     }
 
-    // Accessor methods to read and modify supplier attributes
+    public List<Product> getProducts() {
+        return products;
+    }
 
     public int getId() {
         return id;

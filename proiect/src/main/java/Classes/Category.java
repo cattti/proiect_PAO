@@ -11,7 +11,6 @@ public class Category {
         this.description = description;
     }
 
-    // Accessor methods to read and modify category attributes
 
     public int getId() {
         return id;

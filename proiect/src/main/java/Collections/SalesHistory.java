@@ -34,4 +34,12 @@ public class SalesHistory {
         }
         return foundSales;
     }
+    public static Sale getSaleById(int saleId) {
+        for (Sale sale : salesList) {
+            if (sale.getId() == saleId) {
+                return sale;
+            }
+        }
+        return null;
+    }
 }

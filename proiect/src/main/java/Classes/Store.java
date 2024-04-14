@@ -19,7 +19,6 @@ public class Store {
         this.sales = new ArrayList<>();
     }
 
-    // Getter and setter methods
     public String getName() {
         return name;
     }

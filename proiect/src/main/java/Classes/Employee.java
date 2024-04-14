@@ -14,7 +14,6 @@ public class Employee {
         this.position = position;
     }
 
-    // Getter and setter methods for each attribute
     public int getId() {
         return id;
     }
