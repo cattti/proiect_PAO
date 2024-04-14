@@ -36,4 +36,8 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean equalsIgnoreCase(String otherName) {
+        return name.equalsIgnoreCase(otherName);
+    }
 }
