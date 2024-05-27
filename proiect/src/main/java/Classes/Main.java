@@ -1,6 +1,7 @@
 package Classes;
 import Collections.*;
 import Service.Service;
+import database.SetupData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,22 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+
+
+        SetupData setupData = new SetupData();
+
+        // Crează tabela employee
+        setupData.createTable();
+
+        // Adaugă un angajat pentru testare
+        setupData.addEmployee("John Doe", 3000.0, "Manager");
+
+        // Afișează toți angajații
+        setupData.getAllEmployees();
+
+
+
 
 
         // Crearea unei instanțe a clasei Service
@@ -406,5 +423,7 @@ public class Main {
             System.out.println("Nu există produse cu stoc sub " + threshold + ".");
         }
     }
+
+
 
 }
