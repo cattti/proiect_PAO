@@ -4,7 +4,8 @@ public class Category {
     private int id;
     private String name;
     private String description;
-
+    public static final Category ELECTRONICS = new Category(1345, "Electronics", "Electronic devices");
+    public static final Category CLOTHING = new Category(2, "Clothing", "Clothes and apparel");
     public Category(int id, String name, String description) {
         this.id = id;
         this.name = name;

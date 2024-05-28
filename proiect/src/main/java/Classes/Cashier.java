@@ -16,4 +16,15 @@ public class Cashier extends Employee{
     public void setRegisterNumber(int registerNumber) {
         this.registerNumber = registerNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Cashier{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", salary=" + getSalary() +
+                ", position='" + getPosition() + '\'' +
+                ", registerNumber=" + registerNumber +
+                '}';
+    }
 }

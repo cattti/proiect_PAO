@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 public abstract class EmployeeDao extends GenericDaoImpl<Employee> {
 
-   // private static EmployeeDao instance;
-
-
     EmployeeDao(Connection connection) {
         super(connection);
     }

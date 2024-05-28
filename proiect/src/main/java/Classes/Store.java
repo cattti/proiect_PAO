@@ -71,4 +71,12 @@ public class Store {
     public void addSale(Sale sale) {
         sales.add(sale);
     }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                ", name='" + getName() + '\'' +
+                ", salary=" + getLocation() +
+                '}';
+    }
 }

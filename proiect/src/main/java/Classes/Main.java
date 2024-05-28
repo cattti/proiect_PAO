@@ -1,8 +1,10 @@
 package Classes;
 import Collections.*;
-import Service.Service;
+import Service.*;
 import database.DAOs.CashierDao;
 import database.DAOs.EmployeeDao;
+import database.DAOs.ProductDao;
+import database.DAOs.StoreDao;
 import database.DatabaseConfig;
 import database.SetupData;
 import java.sql.Connection;
@@ -24,25 +26,71 @@ public class Main {
         try (Connection connection = DatabaseConfig.getDatabaseConnection()) {
             // Creează un nou obiect de tip casier
             Cashier newCashier = new Cashier(0, "John Loe", 2505.0, "Cashier", 123456);
-            Cashier newCashier1 = new Cashier(0, "John Mas", 2800.0, "Cashier", 16);
-            Cashier newCashier2 = new Cashier(0, "John Clas", 3000.0, "Cashier", 123);
-            Cashier newCashier3 = new Cashier(0, "John Vras", 2500.0, "Cashier", 126);
+//            Cashier newCashier1 = new Cashier(0, "John Mas", 2800.0, "Cashier", 16);
+//            Cashier newCashier2 = new Cashier(0, "John Clas", 3000.0, "Cashier", 123);
+//            Cashier newCashier3 = new Cashier(0, "John Vras", 2500.0, "Cashier", 126);
 
             // Creează un obiect de tip CashierDao pentru a interacționa cu baza de date
             CashierDao cashierDao = new CashierDao(connection);
 
             // Adaugă casierul în baza de date
             cashierDao.create(newCashier);
-            cashierDao.create(newCashier1);
-            cashierDao.create(newCashier2);
-            cashierDao.create(newCashier3);
+//            cashierDao.create(newCashier1);
+//            cashierDao.create(newCashier2);
+//            cashierDao.create(newCashier3);
 
             System.out.println("Cashier added successfully!");
+
+            Cashier readCashier = cashierDao.read(newCashier.getId());
+            System.out.println("Read Cashier: " + readCashier);
+
+            Cashier readCashier1 = cashierDao.read(newCashier.getId());
+            System.out.println("Read Cashier: " + readCashier1);
+
+            readCashier1.setSalary(3000.0);
+            cashierDao.update(readCashier1);
+            Cashier updatedCashier1 = cashierDao.read(readCashier1.getId());
+            System.out.println("Updated Cashier 1: " + updatedCashier1);
+
+            cashierDao.delete(readCashier1.getId());
+            System.out.println("Deleted cashier with id: " + readCashier1.getId());
+
+
+            List<Employee> cashiers = cashierDao.readAll();
+            System.out.println("All cashiers:");
+            for (Employee cashier : cashiers) {
+                System.out.println(cashier);
+            }
+
+            ProductDao productDao = new ProductDao(connection);
+            StoreDao storeDao = new StoreDao(connection);
+
+            // Adăugați un nou produs
+            Product newProduct = new Product(0, "Laptop", 1500.0, 10, Category.ELECTRONICS);
+            productDao.create(newProduct);
+
+            // Citirea produsului adăugat
+            Product readProduct = productDao.read(0);
+            System.out.println("Read Product: " + readProduct);
+
+            // Adăugați un nou magazin
+//            Store newStore = new Store("MyStore", "123 Main St");
+//            storeDao.create(newStore);
+
+            // Citirea magazinului adăugat
+//            Store readStore = storeDao.read(newStore.getName(),newStore.getLocation());
+//            System.out.println("Read Store: " + readStore);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+
         // Crearea unei instanțe a clasei Service
         Service service = new Service();
+        Audit audit = new Audit();
 
         // Adăugare angajați
         Employee cashier1 = new Cashier(1, "John Doe", 1000.00, "Cashier", 11);
@@ -108,34 +156,34 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    scanProductsForSale(scanner, service);
+                    scanProductsForSale(scanner, service, audit);
                     break;
                 case 2:
-                    purchaseProductsFromSupplier(service);
+                    purchaseProductsFromSupplier(service, audit);
                     break;
                 case 3:
-                    displayInventory(service);
+                    displayInventory(service, audit);
                     break;
                 case 4:
-                    displayProductStockById(scanner, service);
+                    displayProductStockById(scanner, service, audit);
                     break;
                 case 5:
-                    displayCashierForSale(scanner, service);
+                    displayCashierForSale(scanner, service, audit);
                     break;
                 case 6:
-                    displaySaleDetails(scanner, service);
+                    displaySaleDetails(scanner, service, audit);
                     break;
                 case 7:
-                    displayProductsUnderThreshold(service, 50);
+                    displayProductsUnderThreshold(service, 50, audit);
                     break;
                 case 8:
                     addSupplier(scanner, service);
                     break;
                 case 9:
-                    addEmployee(scanner,service);
+                    addEmployee(scanner,service,audit);
                     break;
                 case 10:
-                    removeEmployee(scanner,service);
+                    removeEmployee(scanner,service,audit);
                     break;
                 case 11:
                     System.out.println("Programul a fost încheiat.");
@@ -146,7 +194,7 @@ public class Main {
         }
     }
 
-    private static void scanProductsForSale(Scanner scanner, Service service) {
+    private static void scanProductsForSale(Scanner scanner, Service service, Audit audit) {
         // Afișează lista de produse disponibile pentru vânzare
         System.out.println("Produse disponibile pentru vânzare:");
         List<Product> availableProducts = Inventory.getAllProducts();
@@ -216,11 +264,14 @@ public class Main {
         } else {
             System.out.println("Nu s-au scanat produse. Vânzarea a fost anulată.");
         }
+
+        audit.logAction("Cumpărare produse pentru client");
+
     }
 
 
 
-    private static void purchaseProductsFromSupplier(Service service) {
+    private static void purchaseProductsFromSupplier(Service service, Audit audit) {
         // Afișează lista de furnizori disponibili
         List<Supplier> suppliers = service.getAllSuppliers();
         System.out.println("Furnizori disponibili:");
@@ -290,9 +341,10 @@ public class Main {
         } else {
             System.out.println("Nu s-a găsit furnizorul selectat.");
         }
+        audit.logAction("Achizitie produse de la furnizor");
     }
 
-    private static void addEmployee(Scanner scanner, Service service) {
+    private static void addEmployee(Scanner scanner, Service service, Audit audit) {
         System.out.println("Tipuri de angajați disponibili:");
         System.out.println("1. Casier");
         System.out.println("2. Manager");
@@ -322,9 +374,10 @@ public class Main {
 
         EmployeesList.addEmployee(employee);
         System.out.println("Angajatul a fost adăugat cu succes.");
+        audit.logAction("Adaugare angajat");
     }
 
-    private static void removeEmployee(Scanner scanner, Service service) {
+    private static void removeEmployee(Scanner scanner, Service service, Audit audit) {
         System.out.print("Introduceți ID-ul angajatului pe care doriți să-l eliminați: ");
         int employeeId = scanner.nextInt();
         scanner.nextLine(); // Consumăm linia goală rămasă în buffer
@@ -337,6 +390,7 @@ public class Main {
         } else {
             System.out.println("Nu există angajat cu ID-ul specificat.");
         }
+        audit.logAction("Stergere Angajat");
     }
 
 
@@ -359,7 +413,7 @@ public class Main {
         System.out.println("Furnizorul a fost adăugat cu succes.");
     }
 
-    private static void displayInventory(Service service) {
+    private static void displayInventory(Service service, Audit audit) {
         List<Product> inventory = Inventory.getAllProducts();
 
         System.out.println("Inventory:");
@@ -368,9 +422,10 @@ public class Main {
                     ", Price: $" + product.getPrice() + ", Quantity: " + product.getQuantity() +
                     ", Category: " + product.getCategory().getName());
         }
+        audit.logAction("Afisare inventar");
     }
 
-    private static void displayProductStockById(Scanner scanner, Service service) {
+    private static void displayProductStockById(Scanner scanner, Service service, Audit audit) {
         System.out.print("Introduceți ID-ul produsului: ");
         int productId = scanner.nextInt();
         scanner.nextLine(); // Consumă newline
@@ -382,9 +437,10 @@ public class Main {
         } else {
             System.out.println("Product with ID " + productId + " not found.");
         }
+        audit.logAction("Afisare stoc produse in functie de id");
     }
 
-    private static void displayCashierForSale(Scanner scanner, Service service) {
+    private static void displayCashierForSale(Scanner scanner, Service service, Audit audit) {
         System.out.print("Introduceți ID-ul saleului: ");
         int saleId = scanner.nextInt();
         scanner.nextLine(); // Consumă newline
@@ -395,8 +451,9 @@ public class Main {
         } else {
             System.out.println("Sale with ID " + saleId + " not found or no cashier assigned.");
         }
+        audit.logAction("Afisare casier in functie de vanzare");
     }
-    private static void displaySaleDetails(Scanner scanner, Service service) {
+    private static void displaySaleDetails(Scanner scanner, Service service, Audit audit) {
         System.out.print("Introduceți ID-ul vânzării: ");
         int saleId = scanner.nextInt();
 
@@ -423,9 +480,10 @@ public class Main {
         } else {
             System.out.println("Vânzarea cu ID-ul " + saleId + " nu a fost găsită.");
         }
+        audit.logAction("Afisare detalii pentru vanzare");
     }
 
-    private static void displayProductsUnderThreshold(Service service, int threshold) {
+    private static void displayProductsUnderThreshold(Service service, int threshold, Audit audit) {
         List<Product> lowStockProducts = service.getProductsUnderThreshold(threshold);
         if (!lowStockProducts.isEmpty()) {
             System.out.println("Produse cu stoc sub " + threshold + ":");
@@ -435,6 +493,7 @@ public class Main {
         } else {
             System.out.println("Nu există produse cu stoc sub " + threshold + ".");
         }
+        audit.logAction("Afisare produse cu stoc mai mic de 50");
     }
 
 

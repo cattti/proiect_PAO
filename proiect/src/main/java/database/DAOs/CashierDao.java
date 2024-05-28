@@ -2,7 +2,6 @@ package database.DAOs;
 
 import Classes.Cashier;
 import Classes.Employee;
-import database.DatabaseConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,28 +79,28 @@ public class CashierDao extends EmployeeDao {
         return null;
     }
 
-//    @Override
-//    public List<Cashier> readAll() {
-//        String query = "SELECT e.id, e.name, e.salary, e.position, c.register_number " +
-//                "FROM employee e " +
-//                "JOIN cashier c ON e.id = c.id";
-//        List<Cashier> cashiers = new ArrayList<>();
-//        try (PreparedStatement statement = connection.prepareStatement(query);
-//             ResultSet resultSet = statement.executeQuery()) {
-//            while (resultSet.next()) {
-//                cashiers.add(new Cashier(
-//                        resultSet.getInt("id"),
-//                        resultSet.getString("name"),
-//                        resultSet.getDouble("salary"),
-//                        resultSet.getString("position"),
-//                        resultSet.getInt("register_number")
-//                ));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return cashiers;
-//    }
+    @Override
+    public List<Employee> readAll() {
+        String query = "SELECT e.id, e.name, e.salary, e.position, c.register_number " +
+                "FROM employee e " +
+                "JOIN cashier c ON e.id = c.id";
+        List<Employee> cashiers = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                cashiers.add(new Cashier(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getDouble("salary"),
+                        resultSet.getString("position"),
+                        resultSet.getInt("register_number")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cashiers;
+    }
 
     @Override
     public void update(Employee employee) {
