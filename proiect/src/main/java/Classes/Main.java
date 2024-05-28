@@ -23,13 +23,19 @@ public class Main {
         System.out.println("Tabelele au fost create cu succes.");
         try (Connection connection = DatabaseConfig.getDatabaseConnection()) {
             // Creează un nou obiect de tip casier
-            Cashier newCashier = new Cashier(0, "John Doe", 2500.0, "Cashier", 123456);
+            Cashier newCashier = new Cashier(0, "John Loe", 2505.0, "Cashier", 123456);
+            Cashier newCashier1 = new Cashier(0, "John Mas", 2800.0, "Cashier", 16);
+            Cashier newCashier2 = new Cashier(0, "John Clas", 3000.0, "Cashier", 123);
+            Cashier newCashier3 = new Cashier(0, "John Vras", 2500.0, "Cashier", 126);
 
             // Creează un obiect de tip CashierDao pentru a interacționa cu baza de date
             CashierDao cashierDao = new CashierDao(connection);
 
             // Adaugă casierul în baza de date
             cashierDao.create(newCashier);
+            cashierDao.create(newCashier1);
+            cashierDao.create(newCashier2);
+            cashierDao.create(newCashier3);
 
             System.out.println("Cashier added successfully!");
         } catch (SQLException e) {

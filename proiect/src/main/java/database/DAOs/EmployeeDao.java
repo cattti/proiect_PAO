@@ -9,28 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 public abstract class EmployeeDao extends GenericDaoImpl<Employee> {
 
-    private static EmployeeDao instance;
+   // private static EmployeeDao instance;
 
-//    protected EmployeeDao(Connection connection) {
-//        super(connection);
-//    }
-//
-//    public static EmployeeDao getInstance() {
-//        if (instance == null) {
-//            instance = new EmployeeDao(DatabaseConfig.getDatabaseConnection());
-//        }
-//        return instance;
-//    }
-EmployeeDao(Connection connection) {
-    super(DatabaseConfig.getDatabaseConnection());
-}
 
-//    public static EmployeeDao getInstance() {
-//        if (instance == null) {
-//            instance = new EmployeeDao();
-//        }
-//        return instance;
-//    }
+    EmployeeDao(Connection connection) {
+        super(connection);
+    }
 
     @Override
     public void create(Employee employee) {
@@ -116,6 +100,6 @@ EmployeeDao(Connection connection) {
         }
     }
 
-    public void create(Cashier cashier) {
-    }
+
+
 }
