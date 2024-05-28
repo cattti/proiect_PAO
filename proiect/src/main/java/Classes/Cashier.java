@@ -3,7 +3,7 @@ package Classes;
 public class Cashier extends Employee{
     private int registerNumber;
 
-    public Cashier(int id, String name, double salary, String position) {
+    public Cashier(int id, String name, double salary, String position, int registerNumber) {
         super(id, name, salary, position);
         this.registerNumber= registerNumber;
     }

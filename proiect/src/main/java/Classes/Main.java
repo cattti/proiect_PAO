@@ -1,8 +1,12 @@
 package Classes;
 import Collections.*;
 import Service.Service;
+import database.DAOs.CashierDao;
+import database.DAOs.EmployeeDao;
+import database.DatabaseConfig;
 import database.SetupData;
-
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,25 +19,28 @@ public class Main {
 
         SetupData setupData = new SetupData();
 
-        // Crează tabela employee
-        setupData.createTable();
+        setupData.createTables();
+        System.out.println("Tabelele au fost create cu succes.");
+        try (Connection connection = DatabaseConfig.getDatabaseConnection()) {
+            // Creează un nou obiect de tip casier
+            Cashier newCashier = new Cashier(0, "John Doe", 2500.0, "Cashier", 123456);
 
-        // Adaugă un angajat pentru testare
-        setupData.addEmployee("John Doe", 3000.0, "Manager");
+            // Creează un obiect de tip CashierDao pentru a interacționa cu baza de date
+            CashierDao cashierDao = new CashierDao(connection);
 
-        // Afișează toți angajații
-        setupData.getAllEmployees();
+            // Adaugă casierul în baza de date
+            cashierDao.create(newCashier);
 
-
-
-
-
+            System.out.println("Cashier added successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         // Crearea unei instanțe a clasei Service
         Service service = new Service();
 
         // Adăugare angajați
-        Employee cashier1 = new Cashier(1, "John Doe", 1000.00, "Cashier");
-        Employee cashier2 = new Cashier(2, "Alice Smith", 1500.00, "Cashier");
+        Employee cashier1 = new Cashier(1, "John Doe", 1000.00, "Cashier", 11);
+        Employee cashier2 = new Cashier(2, "Alice Smith", 1500.00, "Cashier",12);
         Employee manager = new Manager(3, "Jane Johnson", 3000.00, "Manager", 10);
         EmployeesList.addEmployee(cashier1);
         EmployeesList.addEmployee(cashier2);
@@ -296,7 +303,7 @@ public class Main {
 
         Employee employee;
         if (employeeType == 1) {
-            employee = new Cashier(EmployeesList.getNextEmployeeId(), name, salary, "Cashier");
+            employee = new Cashier(EmployeesList.getNextEmployeeId(), name, salary, "Cashier",13);
         } else if (employeeType == 2) {
             System.out.print("Introduceți numărul de magazine gestionate de manager: ");
             int numberOfStoresManaged = scanner.nextInt();
